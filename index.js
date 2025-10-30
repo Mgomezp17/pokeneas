@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { config } from './src/config/env.js';
+import path from 'path';
 import routes from './src/routes/index.js';
 import {
   errorHandler,
@@ -12,7 +13,17 @@ import { requestLogger } from './src/middleware/logger.js';
 
 const app = express();
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https://storage.googleapis.com'],
+        styleSrc: ["'self'"],
+      },
+    },
+  })
+);
 app.use(cors());
 
 app.use(express.json());
@@ -22,6 +33,9 @@ if (config.nodeEnv === 'development') {
   app.use(morgan('dev'));
 }
 app.use(requestLogger);
+
+// Static assets
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 // Routes
 app.use('/', routes);

@@ -1,8 +1,8 @@
 import express from 'express';
-import homeRoutes from './homeRoutes.js';
+import pokeNeaRoute from './pokeNeaRoute.js';
 
 const router = express.Router();
 
-router.use('/', homeRoutes);
+router.use('/pokenea', pokeNeaRoute);
 
 export default router;
