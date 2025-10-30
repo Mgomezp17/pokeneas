@@ -1,31 +1,41 @@
 import express from 'express';
-import os from 'os';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import { config } from './src/config/env.js';
+import routes from './src/routes/index.js';
+import {
+  errorHandler,
+  notFoundHandler,
+} from './src/middleware/errorHandler.js';
+import { requestLogger } from './src/middleware/logger.js';
 
 const app = express();
 
-const port = 80;
+app.use(helmet());
+app.use(cors());
 
-const phrases = [
-  'Get ready to be inspired…',
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-  'See rejection as redirection.',
+if (config.nodeEnv === 'development') {
+  app.use(morgan('dev'));
+}
+app.use(requestLogger);
 
-  'There is beauty in simplicity.',
+// Routes
+app.use('/', routes);
 
-  'You can’t be late until you show up.',
-
-  'Maybe life is testing you. Don’t give up.',
-
-  'Impossible is just an opinion.',
-
-  'Alone or not you gonna walk forward.',
-];
-
-app.get('/', (req, res) => {
-  const number = Math.floor(Math.random() * 7);
-  res.send(phrases[number] + ' - Container Id: ' + os.hostname());
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.use(notFoundHandler);
+
+app.use(errorHandler);
+
+app.listen(config.port, () => {
+  console.log(`🚀 Servidor corriendo en puerto ${config.port}`);
+  console.log(`📦 Entorno: ${config.nodeEnv}`);
+  console.log(`🌐 Hostname: ${config.hostname}`);
 });
