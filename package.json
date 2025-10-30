@@ -1,0 +1,31 @@
+{
+  "name": "Pokeneas-API",
+  "version": "1.0.0",
+  "description": "API for Pokeneas of the guetto",
+  "license": "ISC",
+  "author": "Mgomezp17 & Julianvb03",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "5.1.0",
+    "dotenv": "^16.4.5",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mgomezp17/pokeneas.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Mgomezp17/pokeneas/issues"
+  },
+  "homepage": "https://github.com/Mgomezp17/pokeneas#readme"
+}
